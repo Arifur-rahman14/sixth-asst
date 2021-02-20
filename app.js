@@ -12,17 +12,19 @@ triggerEnterBtn.addEventListener('keyup', function (event) {
     document.getElementById('search-btn').click();
   }
 });
+
 // selected image 
 let sliders = [];
 
 
-// If this key doesn't work
-// Find the name in the url and go to their website
-// to create your own api key
+// API key 
 const KEY = '15674931-a9d714b6e9d654524df198e00&q';
+
 
 // show images 
 const showImages = (images) => {
+  triggerEnterBtn.value = "";
+  toggleSpinner();
   imagesArea.style.display = 'block';
   gallery.innerHTML = '';
   // show gallery title
@@ -37,9 +39,10 @@ const showImages = (images) => {
 }
 
 const getImages = (query) => {
-  fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
+  const url = `https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`;
+  toggleSpinner();
+  fetch(url)
     .then(response => response.json())
-    // Problem: Objects Property spelling mistake | hitS = hits
     .then(data => showImages(data.hits))
     .catch(err => console.log(err))
 }
@@ -53,7 +56,6 @@ const selectItem = (event, img) => {
   if (item === -1) {
     sliders.push(img);
   } else {
-    // alert('Hey, Already added !')
     sliders.splice(item, 1);
   }
 }
@@ -93,7 +95,7 @@ const createSlider = () => {
       changeSlide(slideIndex);
     }, duration);
   } else {
-    alert ('Time Duration need to be Positive ... And less then .06 second! PLEASE TRY AGAIN !!');
+    alert ('Time Duration need to be Positive ... And less then .06 second! PLEASE TRY AGAIN !! Or Click Refresh Button to Refresh the Page...Other wise you show default time duration value');
   }
 }
 
@@ -145,3 +147,10 @@ function refreshPage() {
 function refreshButton() {
   document.getElementById('refreshBtn').style.display = "block";
 };
+
+// adding spinner for loading time
+const toggleSpinner = () => {
+  const spinner = document.getElementById('spinner');
+  spinner.classList.toggle('d-none');
+  imagesArea.classList.toggle('d-none');
+}
